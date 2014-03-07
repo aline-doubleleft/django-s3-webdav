@@ -22,7 +22,8 @@ from django.conf import settings
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound, \
 HttpResponseNotAllowed, HttpResponseBadRequest, HttpResponseNotModified
 from django.http import Http404 as HttpNotFound
-from django.utils import hashcompat, synch
+from django.utils import synch
+from hashlib import md5
 from django.utils.http import http_date, parse_etags
 from django.utils.encoding import smart_unicode
 from django.shortcuts import render_to_response
@@ -360,7 +361,7 @@ class DavResource(object):
         absolute path modified time and size. Can be overridden if resources are not stored in a
         file system. The etag is used to detect changes to a resource between HTTP calls. So this
         needs to change if a resource is modified.'''
-        hash = hashcompat.md5_constructor()
+        hash = md5()
         hash.update(self.get_abs_path().encode('utf-8'))
         hash.update(str(self.get_mtime_stamp()))
         hash.update(str(self.get_size()))

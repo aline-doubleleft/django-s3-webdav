@@ -7,6 +7,7 @@ Install django and other dependancies. Make sure you have virtualenv installed. 
 
 ```!bash
 % sudo aptitude install python-virtualenv
+```
 
 After that
 

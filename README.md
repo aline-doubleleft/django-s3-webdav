@@ -41,5 +41,5 @@ Tips
 
 Tied of input the human unreadable aws access id and secret? You are lucky to make a shortcuts. 
 
-Visit http://<host:port>/admin/ input the admin username and password created during db synchronization. Add an user with password, then add a S3Account object. Link the user and fill access id and secret with it. You can type the username and password at the webdav prompt know!
+Visit http://<host:port>/admin/ input the admin username and password created during db synchronization. Add an user with password, then add a S3Account object. Link the user and fill access id and secret with it. You can type the username and password at the webdav prompt now!
 

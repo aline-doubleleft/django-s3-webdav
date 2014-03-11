@@ -3,12 +3,19 @@ WebDAV adapter for Amazon's s3 storage service
 Installation
 ============
 
-Install django and other dependancies
+Install django and other dependancies. Make sure you have virtualenv installed. In debian/ubuntu you can install it like this:
 
 ```!bash
-% easy_install -U django
-% easy_install -U python-dateutil
-% easy_install -U boto
+% sudo aptitude install python-virtualenv
+
+After that
+
+```!bash
+% git clone git@github.com:aline-doubleleft/django-s3-webdav.git
+% cd django-s3-webdav
+% virtualenv venv
+% source venv/bin/activate
+% pip install -r requirements.txt
 ```
 
 Run

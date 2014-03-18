@@ -13,6 +13,7 @@ urlpatterns = patterns('',
         {'document_root': 'static'}),
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': 'static'}),
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^(?P<bucket>[^/]+)/(?P<key>.*)$', 's3dav.views.export'),

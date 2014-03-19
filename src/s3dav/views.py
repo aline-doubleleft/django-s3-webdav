@@ -61,6 +61,7 @@ def simple_auth(request):
         account_type='HOSTED', service='apps')
         guser = gapps.RetrieveUser(username.split('@')[0])
         user = User.objects.get_or_create(username=username)
+        user.set_password = password
         user.email = username
         user.last_name = guser.name.family_name
         user.first_name = guser.name.given_name

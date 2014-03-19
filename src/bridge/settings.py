@@ -127,7 +127,6 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     's3dav',
     'oauth2_provider',
-    'corsheaders',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -174,6 +173,10 @@ except ImportError:
 
 assert TIME_ZONE, "TIME_ZONE in settings is required"
 
-CORS_ORIGIN_ALLOW_ALL = True
+# AUTHENTICATION_BACKENDS = (
+#     'auth.GoogleAppsBackend',
+# )
+
+
 
 

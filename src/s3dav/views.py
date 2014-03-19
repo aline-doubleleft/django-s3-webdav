@@ -1,11 +1,15 @@
 import base64
 import re
 from django.http import HttpResponse, Http404
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, check_password
 
 from s3dav.django_webdav import DavServer
 from s3dav.server import S3DavServer
 from s3dav.models import S3Account
+from django.conf import settings
+
+from gdata.apps.service import AppsService
+from gdata.docs.service import DocsService
 
 def notfound(request, **kw):
     raise Http404
@@ -43,7 +47,29 @@ def simple_auth(request):
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
-        user = None
+        # try:
+        # Check user's password
+        gdocs = DocsService()
+        gdocs.email = username
+        gdocs.password = password
+        gdocs.ProgrammaticLogin()
+
+        # Get the user object
+        gapps = AppsService(domain=settings.DOMAIN)
+        gapps.ClientLogin(username=settings.ADMIN_USERNAME,
+        password=settings.ADMIN_PASSWORD,
+        account_type='HOSTED', service='apps')
+        guser = gapps.RetrieveUser(username.split('@')[0])
+        user = User.objects.get_or_create(username=username)
+        user.email = username
+        user.last_name = guser.name.family_name
+        user.first_name = guser.name.given_name
+        user.is_active = not guser.login.suspended == 'true'
+        user.is_superuser = guser.login.admin == 'true'
+        user.is_staff = user.is_superuser
+        user.save()
+        # except:
+        # user = None
 
     if user and user.check_password(password):
         try:

@@ -173,9 +173,10 @@ except ImportError:
 
 assert TIME_ZONE, "TIME_ZONE in settings is required"
 
-# AUTHENTICATION_BACKENDS = (
-#     'auth.GoogleAppsBackend',
-# )
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'auth.GoogleAppsBackend',
+)
 
 
 

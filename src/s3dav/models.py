@@ -9,7 +9,7 @@ class S3Account(models.Model):
     aws_secret = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name = u'S3帐户'
+        verbose_name = u'doubleleft'
         verbose_name_plural = verbose_name
 
     def __unicode__(self):

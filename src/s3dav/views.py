@@ -45,7 +45,9 @@ def simple_auth(request):
     aws_secret = password
 
     try:
+        print 'before first User.objects.get'
         user = User.objects.get(username=username)
+        print 'after first User.objects.get'
     except User.DoesNotExist:
         # try:
         # Check user's password
@@ -69,10 +71,16 @@ def simple_auth(request):
         user.is_superuser = guser.login.admin == 'true'
         user.is_staff = user.is_superuser
         user.save()
-        # except:
-        # user = None
+        
+        try:
+            print 'we are in the second User.objects.get'
+            user = User.objects.get(username=username)
+            print 'we are after the second Uog'
+        except:
+            print 'we are in the exception'
+            user = None
 
-    if user and user.check_password(password):
+    if user:
         try:
             account = S3Account.objects.get(user=user)
             aws_key = account.aws_access_key

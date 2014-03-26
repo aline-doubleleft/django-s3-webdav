@@ -1,6 +1,16 @@
 Django==1.6.2
+South==0.8.4
 argparse==1.2.1
 boto==2.27.0
+django-braces==1.4.0
+django-cors-headers==0.12
+django-oauth-toolkit==0.7.0
+django-openid-auth==0.5
+gdata==2.0.18
+httplib2==0.8
+oauthlib==0.6.1
 python-dateutil==2.2
+python-openid==2.2.5
+restclient==0.11.0
 six==1.5.2
 wsgiref==0.1.2

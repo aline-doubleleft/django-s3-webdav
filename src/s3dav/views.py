@@ -10,6 +10,7 @@ from django.conf import settings
 
 from gdata.apps.service import AppsService
 from gdata.docs.service import DocsService
+from gdata.service import BadAuthentication
 
 def notfound(request, **kw):
     raise Http404
@@ -45,24 +46,25 @@ def simple_auth(request):
     aws_secret = password
 
     try:
-        print 'before first User.objects.get'
+        # Check if user already exist in django
         user = User.objects.get(username=username)
-        print 'after first User.objects.get'
     except User.DoesNotExist:
-        # try:
+        try:
         # Check user's password
-        gdocs = DocsService()
-        gdocs.email = username
-        gdocs.password = password
-        gdocs.ProgrammaticLogin()
+            gdocs = DocsService()
+            gdocs.email = username
+            gdocs.password = password
+            gdocs.ProgrammaticLogin()
+        except BadAuthentication:
+            raise Http404('User or password does not match!')
 
-        # Get the user object
+        # We create a new user right from here
         gapps = AppsService(domain=settings.DOMAIN)
         gapps.ClientLogin(username=settings.ADMIN_USERNAME,
         password=settings.ADMIN_PASSWORD,
         account_type='HOSTED', service='apps')
         guser = gapps.RetrieveUser(username.split('@')[0])
-        user = User.objects.get_or_create(username=username)
+        user = User.objects.create(username=username)
         user.set_password = password
         user.email = username
         user.last_name = guser.name.family_name
@@ -73,20 +75,23 @@ def simple_auth(request):
         user.save()
         
         try:
-            print 'we are in the second User.objects.get'
+            # We check again for the newly created user
             user = User.objects.get(username=username)
-            print 'we are after the second Uog'
         except:
-            print 'we are in the exception'
             user = None
 
     if user:
-        try:
+        try:    
+            # Here we first try to check if IAM associated with this account exist 
             account = S3Account.objects.get(user=user)
             aws_key = account.aws_access_key
             aws_secret = account.aws_secret
         except S3Account.DoesNotExist:
-            pass
+            # We associate the new gapps account with an AWS key
+            account = S3Account.objects.create(user=user,aws_access_key=settings.AWS_KEY_DEFAULT,aws_secret=settings.AWS_SECRET_DEFAULT)       
+            aws_key = account.aws_access_key
+            aws_secret = account.aws_secret
+
     request.aws_key = aws_key
     request.aws_secret = aws_secret
     

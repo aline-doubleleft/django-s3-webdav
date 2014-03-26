@@ -178,6 +178,3 @@ AUTHENTICATION_BACKENDS = (
     'auth.GoogleAppsBackend',
 )
 
-
-
-
